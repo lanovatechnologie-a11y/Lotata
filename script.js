@@ -33,9 +33,9 @@ let APP_STATE = {
     currentCart: [],
     lastResults: null,
     ticketsHistory: JSON.parse(localStorage.getItem('lotato_tickets')) || [],
-    lotto3Options: [false, false, false], // Modifié: toutes désélectionnées par défaut
-    lotto4Options: [false, false, false], // Modifié: toutes désélectionnées par défaut
-    lotto5Options: [false, false, false], // Modifié: toutes désélectionnées par défaut
+    lotto3Options: [false, false, false],
+    lotto4Options: [false, false, false],
+    lotto5Options: [false, false, false],
     showNumericChips: false,
     showLottoGames: false,
     showSpecialGames: false,
@@ -284,21 +284,24 @@ const GameEngine = {
         const cleanNum = this.getCleanNumber(bet.number);
         const amt = bet.amount;
         
-        const b1 = res.lot1.slice(-2);
+        const lastTwoOfLot1 = res.lot1.slice(-2);
         const b2 = res.lot2;
         const b3 = res.lot3;
         
         let totalGain = 0;
         
-        if (APP_STATE.lotto4Options[0] && cleanNum === (b2 + b3)) {
+        // Option 1: 34 (1e lot) + 09 (2e lot)
+        if (APP_STATE.lotto4Options[0] && cleanNum === (lastTwoOfLot1 + b2)) {
             totalGain += amt * CONFIG.GAMING_RULES.LOTTO4;
         }
         
-        if (APP_STATE.lotto4Options[1] && cleanNum === (b1 + b2)) {
+        // Option 2: 34 (2e lot) + 09 (3e lot)
+        if (APP_STATE.lotto4Options[1] && cleanNum === (b2 + b3)) {
             totalGain += amt * CONFIG.GAMING_RULES.LOTTO4;
         }
         
-        if (APP_STATE.lotto4Options[2] && cleanNum === (b1 + b3)) {
+        // Option 3: 34 (1e lot) + 09 (3e lot)
+        if (APP_STATE.lotto4Options[2] && cleanNum === (lastTwoOfLot1 + b3)) {
             totalGain += amt * CONFIG.GAMING_RULES.LOTTO4;
         }
         
@@ -316,14 +319,17 @@ const GameEngine = {
         
         let totalGain = 0;
         
+        // Option 1: 458 (1e lot) + 23 (2e lot)
         if (APP_STATE.lotto5Options[0] && cleanNum === (lot1 + b2)) {
             totalGain += amt * CONFIG.GAMING_RULES.LOTTO5;
         }
         
+        // Option 2: 458 (1e lot) + 23 (3e lot)
         if (APP_STATE.lotto5Options[1] && cleanNum === (lot1 + b3)) {
             totalGain += amt * CONFIG.GAMING_RULES.LOTTO5;
         }
         
+        // Option 3: 458 (1e lot) + 58 (derniers 2 chiffres du 1er lot)
         if (APP_STATE.lotto5Options[2] && cleanNum === (lot1 + lastTwoOfLot1)) {
             totalGain += amt * CONFIG.GAMING_RULES.LOTTO5;
         }
@@ -396,19 +402,22 @@ const GameEngine = {
     calculateAutoLotto4Gain(bet, res) {
         const numbers = this.getCleanNumber(bet.number);
         
-        const b1 = res.lot1.slice(-2);
+        const lastTwoOfLot1 = res.lot1.slice(-2);
         const b2 = res.lot2;
         const b3 = res.lot3;
         
         let totalGain = 0;
         
-        if (APP_STATE.lotto4Options[0] && numbers === (b2 + b3)) {
+        // Option 1: 34 (1e lot) + 09 (2e lot)
+        if (APP_STATE.lotto4Options[0] && numbers === (lastTwoOfLot1 + b2)) {
             totalGain += bet.amount * CONFIG.GAMING_RULES.AUTO_LOTTO4;
         }
-        if (APP_STATE.lotto4Options[1] && numbers === (b1 + b2)) {
+        // Option 2: 34 (2e lot) + 09 (3e lot)
+        if (APP_STATE.lotto4Options[1] && numbers === (b2 + b3)) {
             totalGain += bet.amount * CONFIG.GAMING_RULES.AUTO_LOTTO4;
         }
-        if (APP_STATE.lotto4Options[2] && numbers === (b1 + b3)) {
+        // Option 3: 34 (1e lot) + 09 (3e lot)
+        if (APP_STATE.lotto4Options[2] && numbers === (lastTwoOfLot1 + b3)) {
             totalGain += bet.amount * CONFIG.GAMING_RULES.AUTO_LOTTO4;
         }
         
@@ -425,12 +434,15 @@ const GameEngine = {
         
         let totalGain = 0;
         
+        // Option 1: 458 (1e lot) + 23 (2e lot)
         if (APP_STATE.lotto5Options[0] && numbers === (lot1 + b2)) {
             totalGain += bet.amount * CONFIG.GAMING_RULES.AUTO_LOTTO5;
         }
+        // Option 2: 458 (1e lot) + 23 (3e lot)
         if (APP_STATE.lotto5Options[1] && numbers === (lot1 + b3)) {
             totalGain += bet.amount * CONFIG.GAMING_RULES.AUTO_LOTTO5;
         }
+        // Option 3: 458 (1e lot) + 58 (derniers 2 chiffres du 1er lot)
         if (APP_STATE.lotto5Options[2] && numbers === (lot1 + lastTwoOfLot1)) {
             totalGain += bet.amount * CONFIG.GAMING_RULES.AUTO_LOTTO5;
         }
@@ -750,15 +762,25 @@ function toggleLottoOption(gameType, optionIndex) {
         optionsArray = APP_STATE.lotto5Options;
     }
     
+    // Toggle l'option
     optionsArray[optionIndex - 1] = !optionsArray[optionIndex - 1];
     
+    // Mettre à jour l'affichage
     const optionChip = document.querySelector(`#lotto${gameType}-options .option-chip[data-option="${optionIndex}"]`);
     if (optionChip) {
         optionChip.classList.toggle('active');
+        
+        // Animation de rebond
         optionChip.classList.add('animate-bounce');
         setTimeout(() => {
             optionChip.classList.remove('animate-bounce');
         }, 500);
+        
+        // Mettre à jour la checkbox interne
+        const checkbox = optionChip.querySelector('input');
+        if (checkbox) {
+            checkbox.checked = optionsArray[optionIndex - 1];
+        }
     }
 }
 
@@ -1065,11 +1087,13 @@ const CartManager = {
         const summary = document.getElementById('cart-summary');
         const totalDisplay = document.getElementById('total-amount');
         const countDisplay = document.getElementById('items-count');
+        const printHeaderBtn = document.getElementById('print-header-btn');
 
         if (APP_STATE.currentCart.length === 0) {
             display.innerHTML = '<div class="empty-msg">Pa gen paray ankò</div>';
             summary.style.display = 'none';
             countDisplay.innerText = "0 jwèt";
+            if (printHeaderBtn) printHeaderBtn.style.display = 'none';
             return;
         }
 
@@ -1107,6 +1131,12 @@ const CartManager = {
         totalDisplay.innerText = total;
         countDisplay.innerText = APP_STATE.currentCart.length + " jwèt";
         summary.style.display = 'block';
+        
+        // Afficher le bouton d'impression en haut
+        if (printHeaderBtn) {
+            printHeaderBtn.style.display = 'flex';
+            printHeaderBtn.innerHTML = `<i class="fas fa-check-circle"></i> Valider (${total} Gdes)`;
+        }
         
         display.scrollTop = display.scrollHeight;
     },
@@ -1292,6 +1322,12 @@ async function processFinalTicket() {
     
     APP_STATE.currentCart = [];
     CartManager.renderCart();
+    
+    // Cacher le bouton d'impression après validation
+    const printHeaderBtn = document.getElementById('print-header-btn');
+    if (printHeaderBtn) {
+        printHeaderBtn.style.display = 'none';
+    }
     
     if (tickets.length === 1) {
         alert("Fich sove ak siksè! #" + tickets[0].id);

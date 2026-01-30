@@ -522,21 +522,39 @@ input:focus { border-color: var(--secondary); background: rgba(0,0,0,0.4); }
 .option-chip {
     flex: 1;
     text-align: center;
-    padding: 10px;
+    padding: 12px 8px;
     background: rgba(0,0,0,0.2);
-    border: 1px solid var(--glass-border);
+    border: 2px solid transparent;
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s;
     min-width: 100px;
+    color: var(--text-dim);
+    position: relative;
 }
 
 .option-chip.active {
-    background: rgba(0, 212, 255, 0.2);
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(173, 0, 241, 0.2));
     border-color: var(--secondary);
     color: var(--secondary);
-    transform: scale(1.05);
-    box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
+}
+
+.option-chip.active::after {
+    content: '✓';
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: var(--secondary);
+    color: black;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .option-chip input {
@@ -621,4 +639,45 @@ input:focus { border-color: var(--secondary); background: rgba(0,0,0,0.4); }
     padding: 15px 20px;
     border-top: 1px solid var(--glass-border);
     margin-top: auto;
+}
+
+/* Bouton imprimer/valider en haut à droite */
+.print-header-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: var(--success);
+    color: black;
+    border: none;
+    border-radius: 12px;
+    padding: 8px 15px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    z-index: 100;
+    transition: all 0.3s;
+}
+
+.print-header-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(0, 241, 144, 0.5);
+}
+
+.print-header-btn:disabled {
+    background: rgba(255,255,255,0.1);
+    color: var(--text-dim);
+    cursor: not-allowed;
+}
+
+.print-header-btn i {
+    font-size: 1rem;
+}
+
+/* Position relative pour le header du betting screen */
+.betting-screen > div:first-child {
+    position: relative;
+    padding: 20px;
 }

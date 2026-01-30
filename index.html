@@ -60,10 +60,18 @@
 
             <!-- Screen 2: Betting Interface -->
             <section id="betting-screen" class="screen">
-                <button class="back-button" onclick="goBackToDraws()">
-                    <i class="fas fa-arrow-left"></i> Retounen
-                </button>
-                <h2 class="section-title" id="current-draw-title">Florida Matin</h2>
+                <div>
+                    <button class="back-button" onclick="goBackToDraws()">
+                        <i class="fas fa-arrow-left"></i> Retounen
+                    </button>
+                    
+                    <!-- Bouton imprimer en haut à droite -->
+                    <button id="print-header-btn" class="print-header-btn" onclick="processFinalTicket()" style="display: none;">
+                        <i class="fas fa-check-circle"></i> Valider
+                    </button>
+                    
+                    <h2 class="section-title" id="current-draw-title">Florida Matin</h2>
+                </div>
                 
                 <!-- Multi-draw indicator -->
                 <div id="multi-draw-indicator" class="multi-draw-indicator" style="display: none;">
@@ -90,15 +98,15 @@
                 <div id="lotto4-options" class="lotto-options">
                     <div class="option-chip" data-option="1" onclick="toggleLottoOption(4, 1)">
                         <input type="checkbox" id="opt1-4">
-                        <label for="opt1-4">Opsyon 1</label>
+                        <label for="opt1-4">1e lot + 2e lot</label>
                     </div>
                     <div class="option-chip" data-option="2" onclick="toggleLottoOption(4, 2)">
                         <input type="checkbox" id="opt2-4">
-                        <label for="opt2-4">Opsyon 2</label>
+                        <label for="opt2-4">2e lot + 3e lot</label>
                     </div>
                     <div class="option-chip" data-option="3" onclick="toggleLottoOption(4, 3)">
                         <input type="checkbox" id="opt3-4">
-                        <label for="opt3-4">Opsyon 3</label>
+                        <label for="opt3-4">1e lot + 3e lot</label>
                     </div>
                 </div>
 
@@ -106,15 +114,15 @@
                 <div id="lotto5-options" class="lotto-options">
                     <div class="option-chip" data-option="1" onclick="toggleLottoOption(5, 1)">
                         <input type="checkbox" id="opt1-5">
-                        <label for="opt1-5">Opsyon 1</label>
+                        <label for="opt1-5">1e lot + 2e lot</label>
                     </div>
                     <div class="option-chip" data-option="2" onclick="toggleLottoOption(5, 2)">
                         <input type="checkbox" id="opt2-5">
-                        <label for="opt2-5">Opsyon 2</label>
+                        <label for="opt2-5">1e lot + 3e lot</label>
                     </div>
                     <div class="option-chip" data-option="3" onclick="toggleLottoOption(5, 3)">
                         <input type="checkbox" id="opt3-5">
-                        <label for="opt3-5">Opsyon 3</label>
+                        <label for="opt3-5">1e lot + derniers 2</label>
                     </div>
                 </div>
 
