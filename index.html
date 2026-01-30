@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>LOTATO PRO | Nova System</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-shell">
+        <div id="sync-status-bar" class="sync-idle">
+            <span id="sync-text">Vérification des résultats...</span>
+        </div>
+
+        <header>
+            <div class="brand">
+                <h1 class="logo-text">LOTATO <span class="pro-badge">vession 6</span></h1>
+                <div id="live-clock">00:00:00</div>
+            </div>
+            <div class="header-actions">
+                <button id="print-button" class="print-header-btn" title="Enregistrer et Imprimer" onclick="processFinalTicket()">
+                    <i class="fas fa-print"></i>
+                </button>
+                <div class="user-profile">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="agent-name">Agent-01</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="content-area">
+            <!-- Screen 1: Draw Selection -->
+            <section id="draw-selection-screen" class="screen active">
+                <button class="back-button" onclick="goBackToDraws()" style="display:none;">
+                    <i class="fas fa-arrow-left"></i> Retounen
+                </button>
+                <h2 class="section-title">Chwazi Tiraj</h2>
+                
+                <div style="padding: 0 20px 10px 20px;">
+                    <button id="multi-draw-btn" class="multi-draw-toggle" onclick="toggleMultiDrawMode()">
+                        <i class="fas fa-layer-group"></i> Plizyè Tiraj
+                    </button>
+                </div>
+
+                <div id="multi-draw-container" class="multi-draw-selector" style="display: none;">
+                    <!-- Multi-draw checkboxes will be inserted here -->
+                </div>
+
+                <div class="draw-grid" id="draws-container">
+                    <!-- Draw cards will be inserted here -->
+                </div>
+
+                <div id="multi-draw-continue" style="display: none; padding: 20px;">
+                    <button onclick="continueToBettingWithMultiDraw()" class="btn-success-full">
+                        <i class="fas fa-play"></i> Kontinye ak Tiraj Chwazi yo
+                    </button>
+                </div>
+            </section>
+
+            <!-- Screen 2: Betting Interface -->
+            <section id="betting-screen" class="screen">
+                <button class="back-button" onclick="goBackToDraws()">
+                    <i class="fas fa-arrow-left"></i> Retounen
+                </button>
+                <h2 class="section-title" id="current-draw-title">Miami Matin</h2>
+                
+                <!-- Multi-draw indicator -->
+                <div id="multi-draw-indicator" class="multi-draw-indicator" style="display: none;">
+                    <i class="fas fa-layer-group"></i> Jwe pou plizyè tiraj: <span id="selected-draws-count">1</span> tiraj
+                </div>
+
+                <!-- Lotto 4 Options -->
+                <div id="lotto4-options" class="lotto-options">
+                    <div class="option-chip active" data-option="1" onclick="toggleLottoOption(4, 1)">
+                        <input type="checkbox" id="opt1-4" checked>
+                        <label for="opt1-4">1e Opsyon (1e & 2e lot)</label>
+                    </div>
+                    <div class="option-chip active" data-option="2" onclick="toggleLottoOption(4, 2)">
+                        <input type="checkbox" id="opt2-4" checked>
+                        <label for="opt2-4">2e Opsyon (2e & 3e lot)</label>
+                    </div>
+                    <div class="option-chip active" data-option="3" onclick="toggleLottoOption(4, 3)">
+                        <input type="checkbox" id="opt3-4" checked>
+                        <label for="opt3-4">3e Opsyon (1e & 3e lot)</label>
+                    </div>
+                </div>
+
+                <!-- Lotto 5 Options -->
+                <div id="lotto5-options" class="lotto-options">
+                    <div class="option-chip active" data-option="1" onclick="toggleLottoOption(5, 1)">
+                        <input type="checkbox" id="opt1-5" checked>
+                        <label for="opt1-5">1e Opsyon (1e lot & 2e lot)</label>
+                    </div>
+                    <div class="option-chip active" data-option="2" onclick="toggleLottoOption(5, 2)">
+                        <input type="checkbox" id="opt2-5" checked>
+                        <label for="opt2-5">2e Opsyon (1e lot & 3e lot)</label>
+                    </div>
+                    <div class="option-chip active" data-option="3" onclick="toggleLottoOption(5, 3)">
+                        <input type="checkbox" id="opt3-5" checked>
+                        <label for="opt3-5">3e Opsyon (1e lot & dernier 2)</label>
+                    </div>
+                </div>
+
+                <section class="betting-panel animate-fade">
+                    <div class="game-selector" id="game-types">
+                        <button class="chip active" data-game="borlette">Borlette</button>
+                        <button class="chip" data-game="lotto">Lotto</button>
+                        <button class="chip" data-game="special">Jeux Spéciaux</button>
+                        <button class="chip" id="toggle-nx-btn" onclick="toggleNumericChips()">NX</button>
+                    </div>
+
+                    <!-- Numeric chips for N0-N9 (hidden by default) -->
+                    <div class="numeric-chips-container" id="numeric-chips">
+                        <button class="chip numeric-chip" data-game="n0" onclick="selectGame('n0')">N0</button>
+                        <button class="chip numeric-chip" data-game="n1" onclick="selectGame('n1')">N1</button>
+                        <button class="chip numeric-chip" data-game="n2" onclick="selectGame('n2')">N2</button>
+                        <button class="chip numeric-chip" data-game="n3" onclick="selectGame('n3')">N3</button>
+                        <button class="chip numeric-chip" data-game="n4" onclick="selectGame('n4')">N4</button>
+                        <button class="chip numeric-chip" data-game="n5" onclick="selectGame('n5')">N5</button>
+                        <button class="chip numeric-chip" data-game="n6" onclick="selectGame('n6')">N6</button>
+                        <button class="chip numeric-chip" data-game="n7" onclick="selectGame('n7')">N7</button>
+                        <button class="chip numeric-chip" data-game="n8" onclick="selectGame('n8')">N8</button>
+                        <button class="chip numeric-chip" data-game="n9" onclick="selectGame('n9')">N9</button>
+                    </div>
+
+                    <!-- Lotto games container -->
+                    <div class="lotto-games-container" id="lotto-games">
+                        <button class="sub-game-btn" onclick="selectGame('lotto3')">Lotto 3</button>
+                        <button class="sub-game-btn" onclick="selectGame('lotto4')">Lotto 4</button>
+                        <button class="sub-game-btn" onclick="selectGame('lotto5')">Lotto 5</button>
+                        <button class="sub-game-btn auto-chip" onclick="selectGame('auto_lotto4')">Lotto 4 Auto</button>
+                        <button class="sub-game-btn auto-chip" onclick="selectGame('auto_lotto5')">Lotto 5 Auto</button>
+                    </div>
+
+                    <!-- Special games container -->
+                    <div class="special-games-container" id="special-games">
+                        <button class="sub-game-btn special-chip" onclick="selectGame('bo')">BO</button>
+                        <button class="sub-game-btn special-chip" onclick="selectGame('grap')">GRAP</button>
+                        <button class="sub-game-btn" onclick="selectGame('mariage')">Mariage</button>
+                        <button class="sub-game-btn auto-chip" onclick="selectGame('auto_marriage')">Mariage Auto</button>
+                    </div>
+
+                    <div class="input-container">
+                        <input type="text" id="num-input" placeholder="00" inputmode="numeric" maxlength="5" class="num-input">
+                        <input type="number" id="amt-input" placeholder="Montan (G)" inputmode="numeric">
+                        <button id="add-bet-btn" class="btn-primary-gradient">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </section>
+
+                <section class="cart-section">
+                    <div class="cart-header">
+                        <h3>Fich an kous</h3>
+                        <span id="items-count">0 jwèt</span>
+                    </div>
+                    <div class="cart-list" id="cart-display">
+                        <!-- Cart items will be inserted here -->
+                    </div>
+                    
+                    <div class="print-button-container">
+                        <div id="cart-summary" style="display: none;">
+                            <div class="total-row">
+                                <span>Total pou peye:</span>
+                                <span id="total-amount">0</span><span> Gdes</span>
+                            </div>
+                            <button onclick="processFinalTicket()" class="btn-success-full">
+                                <i class="fas fa-print"></i> ENPRIME FICH
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Screen 3: History -->
+            <section id="history-screen" class="screen">
+                <div style="padding: 20px;">
+                    <h2 class="section-title">Istorik Tikè</h2>
+                    <div class="history-list" id="history-container">
+                        <!-- History items will be inserted here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Screen 4: Reports -->
+            <section id="reports-screen" class="screen">
+                <div style="padding: 20px;">
+                    <h2 class="section-title">Rapò Jodi a</h2>
+                    <div class="report-card">
+                        <div class="report-row">
+                            <span>Total Tikè:</span>
+                            <span class="val" id="total-tickets">0</span>
+                        </div>
+                        <div class="report-row">
+                            <span>Total Pari:</span>
+                            <span class="val" id="total-bets">0 Gdes</span>
+                        </div>
+                        <div class="report-row">
+                            <span>Total Ganyen:</span>
+                            <span class="val" id="total-wins">0 Gdes</span>
+                        </div>
+                        <div class="report-row">
+                            <span>Pèdi:</span>
+                            <span class="val" id="total-loss">0 Gdes</span>
+                        </div>
+                        <div class="report-row total">
+                            <span>Balans:</span>
+                            <span class="val" id="balance">0 Gdes</span>
+                        </div>
+                    </div>
+
+                    <div class="report-card">
+                        <h3 style="margin-bottom: 15px;">Detay pa tiraj</h3>
+                        <div id="game-breakdown">
+                            <!-- Game breakdown will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Screen 5: Settings -->
+            <section id="settings-screen" class="screen">
+                <div style="padding: 20px;">
+                    <h2 class="section-title">Sistèm</h2>
+                    <div class="settings-card">
+                        <div class="setting-item">
+                            <span>Non Ajan:</span>
+                            <input type="text" id="agent-input" value="Agent-01" style="width: 150px; padding: 8px; border-radius: 8px;">
+                        </div>
+                        <div class="setting-item">
+                            <span>Vèsyon:</span>
+                            <span>6.0.0</span>
+                        </div>
+                        <div class="setting-item">
+                            <span>Dènye Mizajou:</span>
+                            <span id="last-update">2024-03-15</span>
+                        </div>
+                    </div>
+
+                    <div class="settings-card">
+                        <h3 style="margin-bottom: 15px;">Opsyon</h3>
+                        <div class="setting-item">
+                            <span>Son Ganyen:</span>
+                            <label class="switch">
+                                <input type="checkbox" id="sound-toggle" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <span>Notifikasyon:</span>
+                            <label class="switch">
+                                <input type="checkbox" id="notif-toggle" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button onclick="clearAllData()" style="width: 100%; padding: 15px; background: var(--danger); color: white; border: none; border-radius: 12px; margin-top: 20px;">
+                        <i class="fas fa-trash"></i> Efase Tout Done
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <div id="winner-overlay" class="modal-overlay">
+            <div class="winner-modal">
+                <i class="fas fa-trophy trophy-icon"></i>
+                <h2>OU GENYEN !</h2>
+                <div id="winner-details"></div>
+                <button onclick="closeWinnerModal()" class="btn-close">OK</button>
+            </div>
+        </div>
+
+        <nav class="nav-bar">
+            <a href="#" class="nav-item active" onclick="switchTab('home')">
+                <i class="fas fa-dice"></i><span>Jwèt</span>
+            </a>
+            <a href="#" class="nav-item" onclick="switchTab('history')">
+                <i class="fas fa-receipt"></i><span>Istorik</span>
+            </a>
+            <a href="#" class="nav-item" onclick="switchTab('reports')">
+                <i class="fas fa-chart-line"></i><span>Rapò</span>
+            </a>
+            <a href="#" class="nav-item" onclick="switchTab('settings')">
+                <i class="fas fa-cog"></i><span>Sistèm</span>
+            </a>
+        </nav>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
