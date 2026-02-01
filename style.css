@@ -119,6 +119,75 @@ header {
     margin-top: auto;
 }
 
+/* CORRECTION IMPORTANTE: Bouton d'impression en haut */
+.betting-screen > div:first-child {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    position: relative;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.back-button {
+    order: 1;
+    flex: 0 0 auto;
+}
+
+.section-title {
+    order: 2;
+    flex: 1;
+    text-align: center;
+    margin: 0;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#print-header-btn {
+    order: 3;
+    flex: 0 0 auto;
+    margin-left: auto;
+    background: var(--success);
+    color: black;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+}
+
+#print-header-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(0, 241, 144, 0.5);
+}
+
+#print-header-btn:disabled {
+    background: rgba(255,255,255,0.1);
+    color: var(--text-dim);
+    cursor: not-allowed;
+}
+
+#print-header-btn i {
+    font-size: 1rem;
+}
+
+/* Multi-draw indicator */
+.multi-draw-indicator {
+    background: rgba(0,212,255,0.1);
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    margin: 10px 20px;
+}
+
+/* Game Selector */
 .game-selector {
     display: flex;
     gap: 8px;
@@ -200,6 +269,7 @@ header {
     box-shadow: 0 0 15px rgba(255, 165, 2, 0.5);
 }
 
+/* Input Container */
 .input-container {
     display: flex;
     gap: 12px;
@@ -219,7 +289,10 @@ input {
     text-align: center;
 }
 
-input:focus { border-color: var(--secondary); background: rgba(0,0,0,0.4); }
+input:focus { 
+    border-color: var(--secondary); 
+    background: rgba(0,0,0,0.4); 
+}
 
 .btn-primary-gradient {
     background: linear-gradient(135deg, var(--primary), var(--accent));
@@ -232,7 +305,7 @@ input:focus { border-color: var(--secondary); background: rgba(0,0,0,0.4); }
     min-width: 60px;
 }
 
-/* Cart */
+/* Cart Section */
 .cart-section {
     padding: 20px;
     display: flex;
@@ -296,20 +369,61 @@ input:focus { border-color: var(--secondary); background: rgba(0,0,0,0.4); }
 .history-screen {
     padding: 20px;
 }
-.history-list { display: flex; flex-direction: column; gap: 15px; padding-bottom: 80px; }
+.history-list { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 15px; 
+    padding-bottom: 80px; 
+}
 .history-card {
     background: var(--surface);
     border: 1px solid var(--glass-border);
-    border-radius: 16px; padding: 15px;
+    border-radius: 16px; 
+    padding: 15px;
 }
-.card-header { display: flex; justify-content: space-between; border-bottom: 1px solid var(--glass-border); padding-bottom: 8px; margin-bottom: 10px; font-size: 0.8rem; color: var(--text-dim); }
-.card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
-.btn-small { background: rgba(255,255,255,0.1); border: none; color: white; padding: 5px 10px; border-radius: 8px; cursor: pointer; }
+.card-header { 
+    display: flex; 
+    justify-content: space-between; 
+    border-bottom: 1px solid var(--glass-border); 
+    padding-bottom: 8px; 
+    margin-bottom: 10px; 
+    font-size: 0.8rem; 
+    color: var(--text-dim); 
+}
+.card-footer { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-top: 10px; 
+}
+.btn-small { 
+    background: rgba(255,255,255,0.1); 
+    border: none; 
+    color: white; 
+    padding: 5px 10px; 
+    border-radius: 8px; 
+    cursor: pointer; 
+}
 
-.badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; }
-.badge-wait { background: #555; color: white; }
-.badge-win { background: var(--success); color: black; box-shadow: 0 0 10px var(--success); }
-.badge-lost { background: rgba(255,0,0,0.2); color: #ff4d4d; }
+.badge { 
+    padding: 4px 10px; 
+    border-radius: 20px; 
+    font-size: 0.75rem; 
+    font-weight: bold; 
+}
+.badge-wait { 
+    background: #555; 
+    color: white; 
+}
+.badge-win { 
+    background: var(--success); 
+    color: black; 
+    box-shadow: 0 0 10px var(--success); 
+}
+.badge-lost { 
+    background: rgba(255,0,0,0.2); 
+    color: #ff4d4d; 
+}
 
 /* Rapports */
 .reports-screen {
@@ -334,7 +448,10 @@ input:focus { border-color: var(--secondary); background: rgba(0,0,0,0.4); }
     border-top: 2px solid var(--glass-border);
     margin-top: 10px;
 }
-.val { font-family: 'Courier New', monospace; font-weight: bold; }
+.val { 
+    font-family: 'Courier New', monospace; 
+    font-weight: bold; 
+}
 
 /* Modal Winner */
 .modal-overlay {
@@ -461,31 +578,10 @@ input:focus { border-color: var(--secondary); background: rgba(0,0,0,0.4); }
     z-index: 100;
 }
 
-.multi-draw-indicator {
-    background: rgba(0,212,255,0.1);
-    padding: 8px 12px;
-    border-radius: 10px;
-    font-size: 0.9rem;
-    margin: 10px 20px;
-}
-
 .empty-msg {
     text-align: center;
     color: var(--text-dim);
     padding: 20px;
-}
-
-/* Back button */
-.back-button {
-    background: none;
-    border: none;
-    color: var(--secondary);
-    font-size: 1.2rem;
-    padding: 10px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
 }
 
 /* Numeric chips container */
@@ -592,27 +688,6 @@ input:focus { border-color: var(--secondary); background: rgba(0,0,0,0.4); }
     display: flex;
 }
 
-/* Toggle buttons */
-.toggle-btn {
-    background: rgba(0, 212, 255, 0.1);
-    border: 1px solid var(--secondary);
-    border-radius: 12px;
-    color: var(--secondary);
-    padding: 10px 15px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.toggle-btn.active {
-    background: var(--secondary);
-    color: black;
-    box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
-}
-
 .sub-game-btn {
     padding: 8px 12px;
     background: rgba(255,255,255,0.05);
@@ -639,45 +714,4 @@ input:focus { border-color: var(--secondary); background: rgba(0,0,0,0.4); }
     padding: 15px 20px;
     border-top: 1px solid var(--glass-border);
     margin-top: auto;
-}
-
-/* Bouton imprimer/valider en haut à droite */
-.print-header-btn {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: var(--success);
-    color: black;
-    border: none;
-    border-radius: 12px;
-    padding: 8px 15px;
-    font-weight: bold;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.9rem;
-    z-index: 100;
-    transition: all 0.3s;
-}
-
-.print-header-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 15px rgba(0, 241, 144, 0.5);
-}
-
-.print-header-btn:disabled {
-    background: rgba(255,255,255,0.1);
-    color: var(--text-dim);
-    cursor: not-allowed;
-}
-
-.print-header-btn i {
-    font-size: 1rem;
-}
-
-/* Position relative pour le header du betting screen */
-.betting-screen > div:first-child {
-    position: relative;
-    padding: 20px;
 }
